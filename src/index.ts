@@ -1,18 +1,21 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import morgan from 'morgan';
+import connect from './database/mongodb';
+import { loggerMiddleware } from './middlewares/middlewares';
+import playerRoute from './routes/playerRoute';
 
 const app = express();
-dotenv.config();
 const port = process.env.PORT || 3000;
+app.use(loggerMiddleware);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
+app.set('views', 'src/views');
+app.use('/players', playerRoute);
 
-//log requests
-app.use(morgan('tiny'));
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+// Connect to MongoDB
+connect();
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  console.log(`Server listening at http://localhost:${port}`);
 });
