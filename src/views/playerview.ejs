@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- prettier-ignore -->
 <html lang="en">
   <%- include('header'); %>
   <body>
@@ -7,20 +8,15 @@
     <!-- component -->
     <div class="my-2 py-16 h-screen bg-slate-100">
       <div
-        class="py-6 indent-8 align-middle block w-5/6 overflow-hidden border border-slate-300 bg-white rounded-bl-lg rounded-lg justify-center mx-auto">
-        <table class="min-w-full indent-8">
+        class="py-6 align-middle block w-5/6 overflow-hidden border border-slate-300 bg-white rounded-bl-lg rounded-lg justify-center mx-auto">
+        <table class="min-w-full">
           <div class="flex justify-end mr-7">
-            <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded inline-flex items-center"
-              onclick="modalHandler(true)">
-              <i class="fas fa-plus mr-2"></i>
-              <span>Add new player</span>
-            </button>
+            <%- include('modals'); %>
           </div>
           <thead>
             <tr>
               <th
-                class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-900 tracking-wider">
+                class="px-6 text-center	 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-900 tracking-wider">
                 Image
               </th>
               <th
@@ -47,69 +43,63 @@
             </tr>
           </thead>
           <tbody class="bg-white">
+            <% players.forEach(function(player) { %>
             <tr>
               <td
                 class="pl-16 py-4 whitespace-no-wrap border-b border-gray-300">
                 <div class="relative h-10 w-10">
                   <img
                     class="h-full w-full rounded-full object-cover object-center"
-                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt="" />
+                    src="<%= player.image %>" alt="<%= player.name %>" />
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">
                 <div class="text-sm leading-5 text-blue-900">
-                  Damilare Anjorin
+                  <%= player.name %>
                 </div>
               </td>
               <td
                 class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
-                damilareanjorin1@gmail.com
+                <%= player.club %>
               </td>
               <td
                 class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
-                +2348106420637
+                <%= player.position %>
+              </td>
+              <td
+                class="px-6 py-4 whitespace-no-wrap border-b border-gray-300 text-blue-900 text-sm leading-5">
+                <%= player.goals %>
               </td>
               <td
                 class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
                 <span
-                  class="indent-0 relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                  class="indent-0 relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
                   <span
                     aria-hidden
-                    class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                  <span class="relative text-xs">active</span>
+                    class="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
+                  <span class="relative text-xs">
+                    <%= player.isCaptain ? 'Yes' : 'No' %>
+                  </span>
                 </span>
               </td>
-              <td
-                class="px-6 py-4 whitespace-no-wrap border-b border-gray-300 text-blue-900 text-sm leading-5">
-                September 12
-              </td>
-              <td
-                class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-300 text-sm leading-5">
-                <button
-                  class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none">
-                  View Details
-                </button>
-              </td>
+              <td class="py-3 pr-6">
+                <div class="flex item-center justify-start">
+                  <%- include('edit-player', { player: player }); %>
+                  <form method="POST" action="/player/players/<%= player._id %>?_method=DELETE">
+                  <button>                     
+                    <div class="w-4 text-xl transform text-red-500 hover:text-red-600"><i class="fas fa-trash"></i></div> 
+                  </button>
+                </form>
+
+                </div>
+            </td>
             </tr>
+            <% }); %> <!-- end of players.forEach -->
           </tbody>
         </table>
-        <div
-          class="sm:flex-1 sm:flex sm:items-center sm:justify-between mt-4 work-sans">
-          <div>
-            <p class="text-sm leading-5 text-blue-700">
-              Showing
-              <span class="font-medium">1</span>
-              to
-              <span class="font-medium">200</span>
-              of
-              <span class="font-medium">2000</span>
-              results
-            </p>
-          </div>
-        </div>
+       
       </div>
     </div>
-    <%- include('modals'); %>
+    
   </body>
 </html>

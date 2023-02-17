@@ -1,26 +1,15 @@
 <!-- component -->
+
 <script
   src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
   defer></script>
 
 <div x-data="{ modelOpen: false }">
-  <button
-    @click="modelOpen =!modelOpen"
-    class="flex items-center justify-center px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:bg-blue-700 hover:bg-blue-600 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="w-5 h-5"
-      viewBox="0 0 20 20"
-      fill="currentColor">
-      <path
-        fill-rule="evenodd"
-        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-        clip-rule="evenodd" />
-    </svg>
-
-    <span>Add new player</span>
+  <button @click="modelOpen =!modelOpen">
+    <span class="w-4 text-xl mr-8 transform text-slate-500 hover:text-slate-700"
+      ><i class="fas fa-edit"></i
+    ></span>
   </button>
-
   <div
     x-show="modelOpen"
     class="fixed inset-0 z-50 overflow-y-auto"
@@ -53,7 +42,9 @@
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         class="inline-block w-full max-w-lg p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl">
         <div class="flex items-center justify-between space-x-4">
-          <h1 class="text-xl font-medium text-gray-800">Add New Player</h1>
+          <h1 class="text-xl font-medium text-gray-800">
+            Update Football Player
+          </h1>
 
           <button
             @click="modelOpen = false"
@@ -74,10 +65,10 @@
         </div>
 
         <p class="mt-2 text-sm text-gray-500">
-          Add a new player with the information below.
+          Update existing player with the information below.
         </p>
 
-        <form method="POST" action="/player/players">
+        <form method="POST" action="/player/players/<%= player._id %>?_method=PUT">
           <label
             for="name"
             class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
@@ -89,6 +80,7 @@
             name="name"
             required
             id="name"
+            value="<%= player.name %>"
             class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-blue-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
             placeholder="Ronaldo" />
 
@@ -103,6 +95,7 @@
               id="image"
               name="image"
               required
+              value="<%= player.image %>"
               class="text-gray-600 focus:outline-none focus:border focus:border-blue-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
               placeholder="Paste football player image here" />
           </div>
@@ -118,7 +111,7 @@
                   name="club"
                   class="form-select appearance-none block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   aria-label="Default select example">
-                  <option selected>Select a club</option>
+                  <option selected><%=player.club%></option>
                   <% clubs.forEach(function(club) { %>
                   <option value="<%= club %>"><%= club %></option>
                   <% }); %>
@@ -137,7 +130,7 @@
                   name="position"
                   class="form-select appearance-none block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   aria-label="Default select example">
-                  <option selected>Select a position</option>
+                  <option selected><%=player.position%></option>
                   <% positions.forEach(function(position) { %>
                   <option value="<%= position %>"><%= position %></option>
                   <% }); %>
@@ -158,6 +151,7 @@
                   id="goals"
                   name="goals"
                   required
+                  value="<%= player.goals %>"
                   class="form-control block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   placeholder="Number of goals" />
               </div>
@@ -170,7 +164,10 @@
                   class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="checkbox"
                   id="isCaptain"
-                  name="isCaptain" />
+                  name="isCaptain"
+                  <% if (player.isCaptain) { %>
+                    checked
+                  <% } %>/>
                 <label
                   class="form-check-label inline-block text-gray-600"
                   for="isCaptain">
@@ -184,7 +181,7 @@
             <button
               type="submit"
               class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:bg-blue-700 hover:bg-blue-600 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-              Add Player
+              Update Player
             </button>
           </div>
         </form>
