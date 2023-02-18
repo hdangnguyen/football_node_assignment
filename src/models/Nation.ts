@@ -5,5 +5,4 @@ const NationSchema = new mongoose.Schema({
   description: { type: String, required: true },
 });
 // create model
-const Nation = mongoose.model('Nation', NationSchema);
-module.exports = { Nation };
+export const Nation = mongoose.model('Nation', NationSchema);

@@ -1,7 +1,5 @@
 import express from 'express';
 
-const app = express();
-
 import {
   getAllPlayer,
   getPlayerById,
@@ -12,6 +10,9 @@ import {
   updatePlayerById,
 } from '../controllers/playerController';
 const router = express.Router();
+router.route('/').get((req, res) => {
+  res.redirect('/players');
+});
 router
   .route('/players')
   .get(getAllPlayer)

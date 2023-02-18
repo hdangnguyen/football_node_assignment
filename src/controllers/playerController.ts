@@ -45,6 +45,13 @@ export const getPlayerById = async (req: Request, res: Response) => {
 export const createPlayer = async (req: Request, res: Response) => {
   try {
     const { name, image, club, position, goals, isCaptain } = req.body;
+
+    // Check if name already exists
+    const existingPlayer = await Player.findOne({ name: name });
+    if (existingPlayer) {
+      return res.status(400).send('Player with this name already exists');
+    }
+
     const player = new Player({
       name: String(name),
       image: String(image),

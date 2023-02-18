@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- prettier-ignore -->
+<html lang="en">
+  <%- include('header'); %>
+  <body>
+    <%- include('navigator'); %>
+
+    <!-- component -->
+    <div class="my-2 py-16 h-screen bg-slate-100">
+      <div
+        class="py-6 align-middle block w-5/6 overflow-hidden border border-slate-300 bg-white rounded-bl-lg rounded-lg justify-center mx-auto">
+        <table class="min-w-full">
+          <div class="flex justify-end mr-7">
+            <%- include('modals-nation'); %>
+          </div>
+          <thead>
+            <tr>
+              <th
+                class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-900 tracking-wider">
+                 Nation Name
+              </th>
+              <th
+                class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 tracking-wider">
+                Description
+              </th>
+              <th class="px-6 py-3 border-b-2 border-gray-300"></th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <% nations.forEach(function(nation) { %>
+            <tr>
+              <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">
+                <div class="text-sm leading-5 text-blue-900">
+                  <%= nation.name %>
+                </div>
+              </td>
+              <td
+                class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
+                <%= nation.description %>
+              </td>
+              <td class="py-3 pr-6">
+                <div class="flex item-center justify-start">
+                  <%- include('edit-nation', { nation: nation }); %>
+                  <form method="POST" action="/nation/nations/<%= nation._id %>?_method=DELETE">
+                  <button>                     
+                    <div class="w-4 text-xl transform text-red-500 hover:text-red-600"><i class="fas fa-trash"></i></div> 
+                  </button>
+                </form>
+
+                </div>
+            </td>
+            </tr>
+            <% }); %> <!-- end of nations.forEach -->
+          </tbody>
+        </table>
+       
+      </div>
+    </div>
+    
+  </body>
+</html>
