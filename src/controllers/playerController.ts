@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Player } from '../models/Player';
 
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
-const clubs = [
+const careers = [
   'Barcelona',
   'Bayern Munich',
   'Chelsea',
@@ -20,7 +20,7 @@ export const getAllPlayer = async (
 ): Promise<void> => {
   try {
     const players = await Player.find();
-    res.render('playerview', { players, positions, clubs });
+    res.render('playerview', { players, positions, careers });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error retrieving players');
@@ -44,7 +44,7 @@ export const getPlayerById = async (req: Request, res: Response) => {
 // POST /users
 export const createPlayer = async (req: Request, res: Response) => {
   try {
-    const { name, image, club, position, goals, isCaptain } = req.body;
+    const { name, image, career, position, goals, isCaptain } = req.body;
 
     // Check if name already exists
     const existingPlayer = await Player.findOne({ name: name });
@@ -55,7 +55,7 @@ export const createPlayer = async (req: Request, res: Response) => {
     const player = new Player({
       name: String(name),
       image: String(image),
-      club: String(club),
+      career: String(career),
       position: String(position),
       goals: Number(goals),
       isCaptain: Boolean(isCaptain),
@@ -98,11 +98,11 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const updatePlayerById = async (req: Request, res: Response) => {
   try {
-    const { name, image, club, position, goals, isCaptain } = req.body;
+    const { name, image, career, position, goals, isCaptain } = req.body;
     const player = await Player.findByIdAndUpdate(req.params.id, {
       name: String(name),
       image: String(image),
-      club: String(club),
+      career: String(career),
       position: String(position),
       goals: Number(goals),
       isCaptain: Boolean(isCaptain),

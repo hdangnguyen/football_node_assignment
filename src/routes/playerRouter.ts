@@ -1,5 +1,5 @@
 import express from 'express';
-
+import authenticateToken from '../middlewares/authMiddleware';
 import {
   getAllPlayer,
   getPlayerById,
@@ -16,7 +16,7 @@ router.route('/').get((req, res) => {
 router
   .route('/players')
   .get(getAllPlayer)
-  .post(createPlayer)
+  .post(authenticateToken, createPlayer)
   .put(handleUnsupportedRoute)
   .delete(deleteAllPlayers);
 

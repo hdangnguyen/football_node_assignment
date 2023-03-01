@@ -109,18 +109,18 @@
 
           <label
             class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
-            >Club</label
+            >Career</label
           >
           <div class="relative mb-5 mt-2">
             <div class="flex justify-center">
               <div class="xl:w-full">
                 <select
-                  name="club"
+                  name="career"
                   class="form-select appearance-none block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   aria-label="Default select example">
-                  <option selected>Select a club</option>
-                  <% clubs.forEach(function(club) { %>
-                  <option value="<%= club %>"><%= club %></option>
+                  <option selected>Select a career</option>
+                  <% careers.forEach(function(career) { %>
+                  <option value="<%= career %>"><%= career %></option>
                   <% }); %>
                 </select>
               </div>

@@ -3,31 +3,23 @@ import connect from './database/mongodb';
 import { loggerMiddleware } from './middlewares/middlewares';
 import playerRouter from './routes/playerRouter';
 import nationRouter from './routes/nationRouter';
+import authRouter from './routes/authRouter';
 import methodOverride from 'method-override';
-import flash from 'connect-flash';
-import session from 'express-session';
+import bodyParser from 'body-parser';
+
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(loggerMiddleware);
 // use methodOverride middleware
 
-app.use(
-  session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(flash());
 app.use(methodOverride('_method'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
 app.use('/player', playerRouter);
-
+app.use('/auth', authRouter);
 app.use('/nation', nationRouter);
 
 // define route for localhost:5000/nations
