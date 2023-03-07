@@ -1,48 +1,40 @@
-import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { User } from '../models/User';
-import { validatePassword } from '../utils/Validation';
+import { NextFunction, Request, Response } from 'express';
+import { getErrorMessage } from '../utils/getErrorMessage';
+import { validatePassword } from '../utils/passwordValidation';
 require('dotenv').config();
-
-const JWT_SECRET = process.env.JWT_SECRET;
+import * as authService from '../services/authService';
+import passport from 'passport';
 
 // GET /login
 export const getLogin = (req: Request, res: Response) => {
   res.render('login');
 };
+
 // GET /register
 export const getRegister = (req: Request, res: Response) => {
   res.render('register');
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-
   try {
-    // Find the user in the database
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid username or password' });
-    }
-
-    // Check if the password is correct
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid username or password' });
-    }
-
-    // Generate a JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: '1h',
+    passport.authenticate('local', (err: any, user: any, info: any) => {
+      if (err) {
+        return err;
       }
-    );
-
-    // Return the token to the client
-    return res.status(200).json({ token });
+      if (!user) {
+        return res.redirect('/auth/login');
+      } else {
+        req.logIn(user, (err) => {
+          if (err) {
+            return err;
+          }
+          console.log(user);
+          return res.redirect('/');
+        });
+      }
+    })(req, res);
+    // const foundUser = await authService.login(req.body);
+    // res.status(200).send(foundUser);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Something went wrong' });
@@ -50,10 +42,10 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const register = async (req: Request, res: Response) => {
-  const { username, password, confirmPassword } = req.body;
+  const { password, confirmPassword } = req.body;
 
   if (!password || !confirmPassword || password !== confirmPassword) {
-    console.log('passwords do not match', username, password, confirmPassword);
+    console.log('passwords do not match', password, confirmPassword);
     return res.redirect('/auth/register');
   }
 
@@ -65,32 +57,65 @@ export const register = async (req: Request, res: Response) => {
   }
 
   try {
-    // Check if user already exists
-    const userExists = await User.findOne({ username });
-    if (userExists) {
-      return res.status(409).json({ message: 'Username already taken' });
-    }
-
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create new user
-    const user = new User({
-      username,
-      password: hashedPassword,
-      isAdmin: false,
-      name: username,
-      YOB: 0,
-    });
-    await user.save();
+    // Check if username already exists
+    const usernameExists = await authService.findUsername(req.body);
+    if (usernameExists) {
+      console.log('username already exists');
+      return res.redirect('/auth/register');
+    } // Create new user
+    await authService.register(req.body);
 
     // Return success response
     return res.redirect('/auth/login');
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .json({ message: 'Something went wrong, please try again later' });
+  } catch (error) {
+    console.log('error');
+    return res.status(500).send(getErrorMessage(error));
   }
+};
+
+export const guardRoute = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  if (request.user) {
+    response.locals.user = request.user;
+  } else {
+    response.locals.user = null;
+  }
+  next();
+};
+
+export const privateRoute = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  if (!request.user) {
+    response.redirect('/auth/login');
+  } else {
+    next();
+  }
+};
+export const adminRoute = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const requestUser: any = request.user;
+  if (!requestUser.isAdmin) {
+    response.status(401).send('Unauthorized');
+  } else {
+    next();
+  }
+};
+
+export const logout = (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/auth/login');
+    }
+  });
 };

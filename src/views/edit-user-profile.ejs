@@ -1,27 +1,11 @@
-<!-- component -->
-<script
-  src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
-  defer></script>
-
-  <div x-data="{ modelOpen: false }">
-    <% if (locals.user&&locals.user.isAdmin) { %> <!-- if user is logged in -->
-      <button
+<div x-data="{ modelOpen: false }">
+    <button
       @click="modelOpen =!modelOpen"
       class="flex items-center justify-center px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:bg-blue-700 hover:bg-blue-600 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="w-5 h-5"
-        viewBox="0 0 20 20"
-        fill="currentColor">
-        <path
-          fill-rule="evenodd"
-          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-          clip-rule="evenodd" />
-      </svg>
+      <i class="fas fa-edit"></i>
   
-      <span>Add new nation</span>
+      <span>Edit profile</span>
     </button>
-    <% } %>
   
     <div
       x-show="modelOpen"
@@ -55,7 +39,7 @@
           x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           class="inline-block w-full max-w-lg p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl">
           <div class="flex items-center justify-between space-x-4">
-            <h1 class="text-xl font-medium text-gray-800">Add New Nation</h1>
+            <h1 class="text-xl font-medium text-gray-800">Edit profile</h1>
   
             <button
               @click="modelOpen = false"
@@ -76,62 +60,91 @@
           </div>
   
           <p class="mt-2 text-sm text-gray-500">
-            Add a new nation with the information below.
+            Change your profile information by filling the form below.
           </p>
   
-          <form method="POST" action="/nation/nations">
+        <!-- create form for edit user profile -->
+        <form method="POST" action="/user/profile?_method=PUT">
             <label
               for="name"
               class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
-              >Nation Name</label
+              >Full Name</label
             >
             <input
+              required
               type="text"
               id="name"
               name="name"
-              required
               id="name"
+              value="<%= user.name %>""
               class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-blue-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
-              placeholder="VietNam" />
-  
+              placeholder="Ronaldo" />
+
             <label
-              for="description"
+              for="email"
               class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
-              >Description</label
+              >Email</label
             >
             <div class="relative mb-5 mt-2">
-              <textarea
-              class="
-                form-control
-                block
-                w-full
-                px-3
-                py-1.5
-                text-base
-                font-normal
-                text-gray-700
-                bg-white bg-clip-padding
-                border border-solid border-gray-300
-                rounded
-                transition
-                ease-in-out
-                m-0
-                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-              "
-              name="description"
-              id="exampleFormControlTextarea1"
-              rows="3"
-              placeholder="Input description for nation"
-            ></textarea>
+              <input
+              <% if (user.email) { %>
+                value=<%= user.email %>
+                <% } else { %>
+                  value=""
+                <% } %>
+                type="text"
+                id="email"
+                name="email"
+                class="text-gray-600 focus:outline-none focus:border focus:border-blue-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+                placeholder="Input email here" />
             </div>
+            <label
+              for="image"
+              class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
+              >Image Link</label
+            >
+            <div class="relative mb-5 mt-2">
+              <input
+              <% if (user.image) { %>
+              value=<%= user.image %>
+              <% } else { %>
+                value=""
+              <% } %>
+                type="text"
+                id="image"
+                name="image"
+                class="text-gray-600 focus:outline-none focus:border focus:border-blue-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+                placeholder="Paste football player image here" />
+            </div>
+            <label
+              for="yob"
+              class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
+              >Year of birth</label
+            >
+            <div class="relative mb-5 mt-2">
+              <div class="flex justify-center">
+                <div class="xl:w-full">
+                  <input
+                  value=<%= user.YOB %>
+                    type="number"
+                    id="yob"
+                    name="YOB"
+                    class="form-control block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder="Year of birth" />
+                </div>
+              </div>
+            </div>
+            
+  
             <div class="flex justify-end mt-6">
               <button
                 type="submit"
                 class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:bg-blue-700 hover:bg-blue-600 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-               Add Nation
+                Edit profile
               </button>
+            </div>
           </form>
         </div>
       </div>
     </div>
-</div>
+  </div>

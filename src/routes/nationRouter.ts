@@ -1,18 +1,20 @@
 import express from 'express';
 import {
-  getAllNations,
-  getNationById,
-  createNation,
-  updateNationById,
-  deleteNation,
-} from '../controllers/nationController';
+  guardRoute,
+  privateRoute,
+  adminRoute,
+} from '../controllers/authController';
+import * as nationController from '../controllers/nationController';
 const router = express.Router();
-router.get('/', getAllNations);
-router.route('/nations').get(getAllNations).post(createNation);
+router.get('/', nationController.getAllNations);
+router
+  .route('/nations')
+  .get(guardRoute, nationController.getAllNations)
+  .post(guardRoute, privateRoute, adminRoute, nationController.createNation);
 router
   .route('/nations/:id')
-  .get(getNationById)
-  .put(updateNationById)
-  .delete(deleteNation);
+  .get(guardRoute, privateRoute, adminRoute, nationController.getNationById)
+  .put(guardRoute, privateRoute, adminRoute, nationController.updateNationById)
+  .delete(guardRoute, privateRoute, adminRoute, nationController.deleteNation);
 
 export default router;

@@ -101,21 +101,37 @@
           </div>
 
           <label
+          for="career"
+          class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
+          >Career</label
+        >
+        <div class="relative mb-5 mt-2">
+          <textarea
+  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+  name="career"
+  id="career"
+  rows="3"
+  placeholder="Input description for nation"
+><%= player.career %></textarea>
+        </div>
+
+          <label
             class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
-            >Career</label
+            >Nation</label
           >
           <div class="relative mb-5 mt-2">
             <div class="flex justify-center">
               <div class="xl:w-full">
                 <select
-                  name="career"
-                  class="form-select appearance-none block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  aria-label="Default select example">
-                  <option selected><%=player.career%></option>
-                  <% careers.forEach(function(career) { %>
-                  <option value="<%= career %>"><%= career %></option>
-                  <% }); %>
-                </select>
+  name="nation"
+  class="form-select appearance-none block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+  aria-label="Default select example"
+>
+  <option value="">Select a nation</option>
+  <% nations.forEach(function(nation) { %>
+    <option value="<%= nation._id %>" <%= nation._id.toString() === (player.nation ? player.nation._id.toString() : '') ? 'selected' : '' %>><%= nation.name %></option>
+  <% }); %>
+</select>
               </div>
             </div>
           </div>

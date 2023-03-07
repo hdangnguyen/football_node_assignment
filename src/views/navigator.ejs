@@ -11,9 +11,9 @@
         class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
         <div class="flex flex-row items-center justify-between p-4">
           <a
-            href="#"
+            href="/player/dashboard"
             class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline"
-            >FOOTBALL STAT</a
+            >FIFA World Cup</a
           >
           <button
             class="rounded-lg md:hidden focus:outline-none focus:shadow-outline"
@@ -33,20 +33,10 @@
           </button>
         </div>
         <nav
+        
           :class="{'flex': open, 'hidden': !open}"
           class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
-          <a
-            class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-            href="/player"
-            >Player</a
-          >
-          <a
-            class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-            href="/nation"
-            >Nation</a
-          >
-
-          <!-- <div
+          <div
             @click.away="open = false"
             class="relative"
             x-data="{ open: false }">
@@ -79,51 +69,61 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <a
                     class="flex flex row items-start rounded-lg bg-transparent p-2 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                    href="#">
+                    href="/user/profile">
                     <div class="bg-teal-500 text-white rounded-lg p-3">
-                      <svg
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        class="md:h-6 md:w-6 h-4 w-4">
-                        <path
-                          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                      </svg>
+                      <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="ml-3">
-                      <p class="font-semibold">Appearance</p>
-                      <p class="text-sm">Easy customization</p>
+                      <p class="font-semibold">Profile</p>
+                      <p class="text-sm">View and edit profile</p>
                     </div>
                   </a>
-
+                  <% if (locals.user) { %> <!-- if user is logged in -->
                   <a
                     class="flex flex row items-start rounded-lg bg-transparent p-2 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                    href="#">
+                    href="/auth/logout">
                     <div class="bg-teal-500 text-white rounded-lg p-3">
-                      <svg
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        class="md:h-6 md:w-6 h-4 w-4">
-                        <path
-                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                      </svg>
+                      <i class="fa-solid fa-right-from-bracket"></i>
                     </div>
                     <div class="ml-3">
-                      <p class="font-semibold">Comments</p>
-                      <p class="text-sm">Check your latest comments</p>
+                      <p class="font-semibold">Logout</p>
+                      <p class="text-sm">Logout from the app</p>
                     </div>
                   </a>
+                  <% } else { %> <!-- if user is not logged in -->
+                  <a
+                    class="flex flex row items-start rounded-lg bg-transparent p-2 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    href="/auth/login">
+                    <div class="bg-teal-500 text-white rounded-lg p-3">
+                      <i class="fa-solid fa-right-to-bracket"></i>
+                    </div>
+                    <div class="ml-3">
+                      <p class="font-semibold">Login</p>
+                      <p class="text-sm">Login to the app</p>
+                    </div>
+                  </a>
+                  <% } %> <!-- end if user is logged in -->
                 </div>
               </div>
             </div>
-          </div> -->
+          </div>
+          <a
+            class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+            href="/player/dashboard"
+            >Dashboard</a
+          >
+          <a
+            class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+            href="/player"
+            >Player</a
+          >
+          <a
+            class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+            href="/nation"
+            >Nation</a
+          >
+
+          
         </nav>
       </div>
     </div>

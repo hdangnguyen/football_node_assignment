@@ -11,7 +11,6 @@
         class="py-6 align-middle block w-5/6 overflow-hidden border border-slate-300 bg-white rounded-bl-lg rounded-lg justify-center mx-auto">
         <table class="min-w-full">
           <div class="flex justify-end mr-7">
-            <%- include('modals'); %>
           </div>
           <thead>
             <tr>
@@ -21,95 +20,60 @@
               </th>
               <th
                 class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 tracking-wider">
-                Name
+                Username
               </th>
               <th
                 class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 tracking-wider">
-                Career
+                Full Name
               </th>
               <th
                 class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 tracking-wider">
-                Nation
+                Email
               </th>
               <th
                 class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 tracking-wider">
-                Position
+                Year of Birth
               </th>
               <th
                 class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 tracking-wider">
-                Goals
-              </th>
-              <th
-                class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 tracking-wider">
-                isCaptain
+                Role
               </th>
               <th class="px-6 py-3 border-b-2 border-gray-300"></th>
             </tr>
           </thead>
           <tbody class="bg-white">
-            <% players.forEach(function(player) { %>
+            <% users.forEach(function(user) { %>
             <tr>
               <td
                 class="pl-16 py-4 whitespace-no-wrap border-b border-gray-300">
                 <div class="relative h-10 w-10">
                   <img
                     class="h-full w-full rounded-full object-cover object-center"
-                    src="<%= player.image %>" alt="<%= player.name %>" />
+                    src="<%= user.image %>" alt="<%= user.name %>" />
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">
                 <div class="text-sm leading-5 text-blue-900">
-                  <%= player.name %>
+                  <%= user.username %>
                 </div>
               </td>
-              <td
-                class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
-                <%= player.career %>
-              </td>
-              <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
-                <% if (player.nation) { %>
-                  <%= player.nation.name %>
-                <% } else { %>
-                  Unknown
-                <% } %>
-              </td>
-              
-              <td
-                class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
-                <%= player.position %>
+                <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
+                <%= user.name %>
               </td>
               <td
                 class="px-6 py-4 whitespace-no-wrap border-b border-gray-300 text-blue-900 text-sm leading-5">
-                <%= player.goals %>
+                <%= user.email %>
               </td>
               <td
-                class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-300 text-sm leading-5">
-                <span
-                  class="indent-0 relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
-                  <span
-                    aria-hidden
-                    class="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
-                  <span class="relative text-xs">
-                    <%= player.isCaptain ? 'Yes' : 'No' %>
-                  </span>
-                </span>
+                class="px-6 py-4 whitespace-no-wrap border-b border-gray-300 text-blue-900 text-sm leading-5">
+                <%= user.YOB %>
               </td>
-              <% if (locals.user&&locals.user.isAdmin) { %> <!-- if user is logged in -->
-
-              <td class="py-3 pr-6">
-                <div class="flex item-center justify-start">
-                  <%- include('edit-player', { player: player }); %>
-                  <form method="POST" action="/player/players/<%= player._id %>?_method=DELETE">
-                  <button>                     
-                    <div class="w-4 text-xl transform text-red-500 hover:text-red-600"><i class="fas fa-trash"></i></div> 
-                  </button>
-                </form>
-
-                </div>
+              <td
+                class="px-6 py-4 whitespace-no-wrap border-b border-gray-300 text-blue-900 text-sm leading-5">
+                User
               </td>
-              <% } %>
             </tr>
-            <% }); %> <!-- end of players.forEach -->
+            <% }); %> <!-- end of user.forEach -->
           </tbody>
         </table>
       </div>

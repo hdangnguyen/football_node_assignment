@@ -4,7 +4,8 @@
   defer></script>
 
 <div x-data="{ modelOpen: false }">
-  <button
+  <% if (locals.user&&locals.user.isAdmin) { %> <!-- if user is logged in -->
+    <button
     @click="modelOpen =!modelOpen"
     class="flex items-center justify-center px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:bg-blue-700 hover:bg-blue-600 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
     <svg
@@ -20,6 +21,7 @@
 
     <span>Add new player</span>
   </button>
+  <% } %>
 
   <div
     x-show="modelOpen"
@@ -108,19 +110,50 @@
           </div>
 
           <label
+              for="career"
+              class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
+              >Career</label
+            >
+            <div class="relative mb-5 mt-2">
+              <textarea
+              class="
+                form-control
+                block
+                w-full
+                px-3
+                py-1.5
+                text-base
+                font-normal
+                text-gray-700
+                bg-white bg-clip-padding
+                border border-solid border-gray-300
+                rounded
+                transition
+                ease-in-out
+                m-0
+                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+              "
+              name="career"
+              id="exampleFormControlTextarea1"
+              rows="3"
+              placeholder="Input description for nation"
+            ></textarea>
+            </div>
+
+          <label
             class="text-gray-800 text-sm font-medium leading-tight tracking-normal"
-            >Career</label
+            >Nation</label
           >
           <div class="relative mb-5 mt-2">
             <div class="flex justify-center">
               <div class="xl:w-full">
                 <select
-                  name="career"
+                  name="nation"
                   class="form-select appearance-none block w-full px-3 py-1.5 text-sm font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   aria-label="Default select example">
-                  <option selected>Select a career</option>
-                  <% careers.forEach(function(career) { %>
-                  <option value="<%= career %>"><%= career %></option>
+                  <option selected>Select a nation</option>
+                  <% nations.forEach(function(nation) { %>
+                  <option value="<%= nation._id %>"><%= nation.name %></option>
                   <% }); %>
                 </select>
               </div>

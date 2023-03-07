@@ -1,11 +1,12 @@
-import express, { Request, Response } from 'express';
-import { Nation } from '../models/Nation';
-
+import { Request, Response } from 'express';
+import { NationModel } from '../models/Nation';
+import { PlayerModel } from '../models/Player';
 // GET all nations
 export const getAllNations = async (req: Request, res: Response) => {
   try {
-    const nations = await Nation.find();
-    res.render('nationview', { nations });
+    console.log(req.user);
+    const nations = await NationModel.find();
+    res.render('nationview', { nations, user: req.user });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error retrieving nations');
@@ -15,7 +16,7 @@ export const getAllNations = async (req: Request, res: Response) => {
 // GET nation by id
 export const getNationById = async (req: Request, res: Response) => {
   try {
-    const nation = await Nation.findById(req.params.id);
+    const nation = await NationModel.findById(req.params.id);
     if (!nation) {
       return res.status(404).send('Nation not found');
     }
@@ -31,11 +32,11 @@ export const createNation = async (req: Request, res: Response) => {
   try {
     const { name, description } = req.body;
     // Check if name already exists
-    const existingNation = await Nation.findOne({ name: name });
+    const existingNation = await NationModel.findOne({ name: name });
     if (existingNation) {
       return res.status(400).send('Nation with this name already exists');
     }
-    const nation = new Nation({
+    const nation = new NationModel({
       name: String(name),
       description: String(description),
     });
@@ -51,7 +52,7 @@ export const createNation = async (req: Request, res: Response) => {
 export const updateNationById = async (req: Request, res: Response) => {
   try {
     const { name, description } = req.body;
-    const nation = await Nation.findById(req.params.id);
+    const nation = await NationModel.findById(req.params.id);
     if (!nation) {
       return res.status(404).send('Nation not found');
     }
@@ -68,7 +69,13 @@ export const updateNationById = async (req: Request, res: Response) => {
 // DELETE nation by id
 export const deleteNation = async (req: Request, res: Response) => {
   try {
-    const nation = await Nation.findById(req.params.id);
+    const nation = await NationModel.findById(req.params.id);
+    const players = await PlayerModel.find({ nation: req.params.id });
+    if (players.length > 0) {
+      // Prevent the nation from being deleted and inform the user
+      return res.status(400).send('Cannot delete nation with assigned players');
+    }
+
     if (!nation) {
       return res.status(404).send('Nation not found');
     }
@@ -83,7 +90,7 @@ export const deleteNation = async (req: Request, res: Response) => {
 // DELETE all nations
 export const deleteAllNations = async (req: Request, res: Response) => {
   try {
-    const result = await Nation.deleteMany({});
+    const result = await NationModel.deleteMany({});
     res.status(200).send(`Deleted ${result.deletedCount} nations`);
   } catch (error) {
     console.error(error);
